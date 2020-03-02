@@ -1,10 +1,9 @@
 package kotlinx.io
 
 import kotlinx.io.buffer.*
-import kotlinx.io.pool.ObjectPool
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
-import kotlin.math.min
+import kotlinx.io.bytes.*
+import kotlinx.io.pool.*
+import kotlin.math.*
 
 /**
  * [Input] is an abstract base class for synchronous byte readers.
@@ -54,44 +53,38 @@ public abstract class Input : Closeable {
      * Buffer for current operations.
      * Note, that buffer can be exhausted (position == limit).
      */
-    @PublishedApi
-    internal var buffer: Buffer
+    private var buffer: Buffer
 
     /**
      * Current reading position in the [buffer].
      */
-    @PublishedApi
-    internal var position: Int = 0
+    private var position: Int = 0
 
     /**
      * Number of bytes loaded into the [buffer].
      */
-    @PublishedApi
-    internal var limit: Int = 0
+    private var limit: Int = 0
 
     /**
      * Index of a current buffer in the [previewBytes].
      */
-    @PublishedApi
-    internal var previewIndex: Int = 0
+    private var previewIndex: Int = 0
 
     /**
      * Flag to indicate if current [previewBytes] are being discarded.
      * When no preview is in progress and a current [buffer] has been exhausted, it should be discarded.
      */
-    @PublishedApi
-    internal var previewDiscard: Boolean = true
+    private var previewDiscard: Boolean = true
 
     /**
      * Recorded buffers for preview operation.
      */
-    @PublishedApi
-    internal var previewBytes: Bytes? = null
+    private var previewBytes: Bytes? = null
 
     /**
      * Constructs a new Input with the given `bufferPool`.
      */
-    public constructor(pool: ObjectPool<Buffer>) {
+    constructor(pool: ObjectPool<Buffer>) {
         bufferPool = pool
         buffer = pool.borrow()
     }
@@ -182,32 +175,30 @@ public abstract class Input : Closeable {
      *
      * This operation saves the state of the [Input] before [reader] and accumulates buffers for replay.
      * When the [reader] finishes, it rewinds this [Input] to the state before the [reader] block.
-     * Please note that [Input] holds accumulated buffers until they aren't consumed outside of the [preview].
+     * Please note that [Input] holds accumulated buffers until they are't consumed outside of the [preview].
      *
      * Preview operations can be nested.
      */
-    public inline fun <R> preview(reader: Input.() -> R): R {
-        contract {
-            callsInPlace(reader, InvocationKind.EXACTLY_ONCE)
-        }
-
-        if (position == limit && fetchCachedOrFill() == 0)
+    public fun <R> preview(reader: Input.() -> R): R {
+        if (position == limit && fetchCachedOrFill() == 0) {
             throw EOFException("End of file while reading buffer")
+        }
 
         val markDiscard = previewDiscard
         val markIndex = previewIndex
         val markPosition = position
+
         previewDiscard = false
         val result = reader()
         previewDiscard = markDiscard
         position = markPosition
 
-        if (previewIndex == markIndex)
-        // we are at the same buffer, just restore the position & state above
+        if (previewIndex == markIndex) {
+            // we are at the same buffer, just restore the position & state above
             return result
+        }
 
         val bytes = previewBytes!!
-
         bytes.pointed(markIndex) { buffer, limit ->
             this.buffer = buffer
             this.limit = limit
@@ -223,9 +214,8 @@ public abstract class Input : Closeable {
      * This method can use [fill] if no bytes are available in the cache. Please consider using [readAvailableTo] in
      * performance-critical code.
      */
-    public fun exhausted(): Boolean {
-        return position == limit && fetchCachedOrFill() == 0
-    }
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun exhausted(): Boolean = !prefetch(1)
 
     /**
      * Checks that [size] bytes are fetched in [Input].
@@ -427,12 +417,9 @@ public abstract class Input : Closeable {
      * @return consumed bytes count
      */
     internal inline fun readBufferRange(reader: (Buffer, startOffset: Int, endOffset: Int) -> Int): Int {
-        contract {
-            callsInPlace(reader, InvocationKind.AT_MOST_ONCE)
-        }
-
-        if (position == limit && fetchCachedOrFill() == 0)
+        if (position == limit && fetchCachedOrFill() == 0) {
             return 0
+        }
 
         val consumed = reader(buffer, position, limit)
         position += consumed
@@ -473,8 +460,7 @@ public abstract class Input : Closeable {
      *
      * Current [buffer] should be exhausted at this moment, i.e. [position] should be equal to [limit].
      */
-    @PublishedApi
-    internal fun fetchCachedOrFill(): Int {
+    private fun fetchCachedOrFill(): Int {
         val discard = previewDiscard
         val preview = previewBytes
 
@@ -498,7 +484,7 @@ public abstract class Input : Closeable {
      * Instantiates [previewBytes] and fill it.
      */
     private fun startPreview(): Bytes {
-        val bytes = Bytes(bufferPool).apply {
+        val bytes = Bytes().apply {
             append(buffer, limit)
         }
 
