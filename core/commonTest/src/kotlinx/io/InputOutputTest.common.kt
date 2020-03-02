@@ -4,9 +4,7 @@ package kotlinx.io
 
 import kotlinx.io.buffer.*
 import kotlinx.io.bytes.*
-import kotlinx.io.pool.DefaultPool
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
+import kotlinx.io.pool.*
 import kotlin.test.*
 
 class InputOutputTest {
@@ -33,15 +31,15 @@ class InputOutputTest {
 
     @Test
     fun testReadAvailableToWithSameBuffer() {
-        var instance = Buffer.EMPTY
-        var result = Buffer.EMPTY
+        var instance: Buffer = Buffer.EMPTY
+        var result: Buffer = Buffer.EMPTY
 
-        val input = LambdaInput { buffer, _, _ ->
+        val input: Input = LambdaInput { buffer, start, end ->
             instance = buffer
             return@LambdaInput 42
         }
 
-        val output = LambdaOutput { source, _, endIndex ->
+        val output = LambdaOutput { source, startIndex, endIndex ->
             result = source
             assertEquals(42, endIndex)
         }
@@ -205,7 +203,6 @@ class InputOutputTest {
     @Test
     fun testFillDirect() {
         val myBuffer = bufferOf(ByteArray(1024))
-
         val input = object : Input() {
             override fun fill(buffer: Buffer, startIndex: Int, endIndex: Int): Int {
                 assertTrue { myBuffer === buffer }
@@ -213,7 +210,9 @@ class InputOutputTest {
                 return 1
             }
 
-            override fun closeSource() = Unit
+            override fun closeSource() {
+
+            }
         }
 
         assertEquals(1, input.readAvailableTo(myBuffer))
@@ -326,113 +325,8 @@ class InputOutputTest {
         assertEquals(1023, end)
     }
 
-    @Test
-    fun testReadAvailableToReturnValue() {
-        var readIndex = 0
-        var writeIndex = 0
-
-        val input = object : Input() {
-            override fun fill(buffer: Buffer, startIndex: Int, endIndex: Int): Int {
-                readIndex++
-
-                buffer.storeByteAt(startIndex, 42)
-                return 1
-            }
-
-            override fun closeSource() {
-                return
-            }
-        }
-
-        val output = object : Output() {
-            override fun flush(source: Buffer, startIndex: Int, endIndex: Int) {
-                writeIndex++
-
-                assertEquals(startIndex + 1, endIndex)
-                assertEquals(42, source.loadByteAt(startIndex))
-            }
-
-            override fun closeSource() {
-            }
-        }
-
-        repeat(DEFAULT_BUFFER_SIZE * 2) {
-            assertEquals(1, input.readAvailableTo(output))
-            output.flush()
-            assertEquals(it + 1, readIndex)
-            assertEquals(it + 1, writeIndex)
-        }
-
-        repeat(DEFAULT_BUFFER_SIZE * 2) {
-            input.prefetch(1)
-            assertEquals(1, input.readAvailableTo(output))
-
-            assertEquals(DEFAULT_BUFFER_SIZE * 2 + it + 1, readIndex)
-            assertEquals(DEFAULT_BUFFER_SIZE * 2 + it + 1, writeIndex)
-        }
-    }
-
-    @Test
-    fun testReadAvailableToReturnValueAfterSkipByte() {
-        var readIndex = 0
-        var writeIndex = 0
-
-        val input = object : Input() {
-            override fun fill(buffer: Buffer, startIndex: Int, endIndex: Int): Int {
-                check(startIndex + 10 <= endIndex)
-                readIndex += 10
-                return 10
-            }
-
-            override fun closeSource() {
-                return
-            }
-        }
-
-        val output = object : Output() {
-            override fun flush(source: Buffer, startIndex: Int, endIndex: Int) {
-                val count = endIndex - startIndex
-                writeIndex += count
-                assertEquals(9, count)
-            }
-
-            override fun closeSource() {
-            }
-        }
-
-
-        repeat(DEFAULT_BUFFER_SIZE * 2) {
-            input.readByte()
-            assertEquals(9, input.readAvailableTo(output))
-            output.flush()
-
-            assertEquals((it + 1) * 10, readIndex)
-            assertEquals((it + 1) * 9, writeIndex)
-        }
-
-        var previousRead = readIndex
-        var previousWrite = writeIndex
-        repeat(DEFAULT_BUFFER_SIZE * 2) {
-            input.prefetch(20)
-            input.readByte()
-            assertEquals(9, input.readAvailableTo(output))
-            input.readByte()
-            assertEquals(9, input.readAvailableTo(output))
-
-            assertEquals(20, readIndex - previousRead)
-            assertEquals(18, writeIndex - previousWrite)
-            previousRead = readIndex
-            previousWrite = writeIndex
-        }
-    }
-
-    private inline fun checkException(block: () -> Unit) {
-        contract {
-            callsInPlace(block, InvocationKind.AT_MOST_ONCE)
-        }
-
+    private fun checkException(block: () -> Unit) {
         var fail = false
-
         try {
             block()
         } catch (exception: Throwable) {
