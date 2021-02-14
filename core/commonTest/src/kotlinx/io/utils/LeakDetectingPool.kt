@@ -2,8 +2,11 @@
 
 package kotlinx.io.utils
 
-import kotlinx.io.buffer.*
-import kotlinx.io.pool.*
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.buffer.DEFAULT_BUFFER_SIZE
+import kotlinx.io.buffer.bufferOf
+import kotlinx.io.buffer.sameAs
+import kotlinx.io.pool.ObjectPool
 
 /**
  * The pool that tracks every borrowed object and check if it belongs to this pool.

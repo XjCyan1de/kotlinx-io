@@ -1,7 +1,10 @@
 package kotlinx.io
 
-import kotlinx.io.buffer.*
-import kotlinx.io.text.*
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.buffer.DEFAULT_BUFFER_SIZE
+import kotlinx.io.text.forEachUtf8Line
+import kotlinx.io.text.readUtf8Line
+import kotlinx.io.text.readUtf8Lines
 import kotlin.test.*
 
 class LimitingInputTest {

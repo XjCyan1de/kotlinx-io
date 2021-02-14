@@ -1,6 +1,6 @@
 package kotlinx.io.text
 
-import kotlinx.io.*
+import kotlinx.io.Input
 
 private const val DEFAULT_CAPACITY: Int = 32
 
@@ -9,7 +9,7 @@ private const val DEFAULT_CAPACITY: Int = 32
  *
  * @throws MalformedInputException if decoder fail to recognize charset.
  */
-public fun Input.readUtf8StringUntilDelimiterTo(output: Appendable, delimiter: Char): Int = decodeUtf8Chars {
+fun Input.readUtf8StringUntilDelimiterTo(output: Appendable, delimiter: Char): Int = decodeUtf8Chars {
     if (it == delimiter) {
         return@decodeUtf8Chars false
     }
@@ -21,7 +21,7 @@ public fun Input.readUtf8StringUntilDelimiterTo(output: Appendable, delimiter: C
  * Read UTF-8 string until any of the [delimiters] to [output]. The delimiter will be consumed from [Input]
  * @throws MalformedInputException if decoder fail to recognize charset.
  */
-public fun Input.readUtf8StringUntilDelimitersTo(output: Appendable, delimiters: String): Int = decodeUtf8Chars {
+fun Input.readUtf8StringUntilDelimitersTo(output: Appendable, delimiters: String): Int = decodeUtf8Chars {
     if (it in delimiters) {
         return@decodeUtf8Chars false
     }
@@ -35,7 +35,7 @@ public fun Input.readUtf8StringUntilDelimitersTo(output: Appendable, delimiters:
  *
  * @throws MalformedInputException if decoder fail to recognize charset.
  */
-public fun Input.readUtf8StringTo(output: Appendable, length: Int = Int.MAX_VALUE): Int {
+fun Input.readUtf8StringTo(output: Appendable, length: Int = Int.MAX_VALUE): Int {
     var remaining = length
     return decodeUtf8Chars {
         output.append(it)
@@ -48,7 +48,7 @@ public fun Input.readUtf8StringTo(output: Appendable, length: Int = Int.MAX_VALU
  *
  * @throws MalformedInputException if decoder fail to recognize charset.
  */
-public fun Input.readUtf8LineTo(output: Appendable, limit: Int = Int.MAX_VALUE) {
+fun Input.readUtf8LineTo(output: Appendable, limit: Int = Int.MAX_VALUE) {
     var remaining = limit
     // TODO: consumes char after lonely CR
     var seenCR = false
@@ -75,7 +75,7 @@ public fun Input.readUtf8LineTo(output: Appendable, limit: Int = Int.MAX_VALUE) 
  *
  * @throws MalformedInputException if decoder fail to recognize charset.
  */
-public fun Input.readUtf8String(length: Int = Int.MAX_VALUE): String {
+fun Input.readUtf8String(length: Int = Int.MAX_VALUE): String {
     val capacity = if (length == Int.MAX_VALUE) DEFAULT_CAPACITY else length
     return buildString(capacity) {
         readUtf8StringTo(this, length)
@@ -87,7 +87,7 @@ public fun Input.readUtf8String(length: Int = Int.MAX_VALUE): String {
  *
  * @throws MalformedInputException if decoder fail to recognize charset.
  */
-public fun Input.readUtf8StringUntilDelimiter(delimiter: Char): String = buildString {
+fun Input.readUtf8StringUntilDelimiter(delimiter: Char): String = buildString {
     readUtf8StringUntilDelimiterTo(this, delimiter)
 }
 
@@ -96,7 +96,7 @@ public fun Input.readUtf8StringUntilDelimiter(delimiter: Char): String = buildSt
  *
  * @throws MalformedInputException if decoder fail to recognize charset.
  */
-public fun Input.readUtf8StringUntilDelimiters(delimiters: String): String = buildString {
+fun Input.readUtf8StringUntilDelimiters(delimiters: String): String = buildString {
     readUtf8StringUntilDelimitersTo(this, delimiters)
 }
 
@@ -258,6 +258,7 @@ private val Utf8StateMachine = intArrayOf(
 )
 
 private const val STATE_FINISH = -2
+
 //private const val Utf8_STATE_ASCII = -1
 internal const val STATE_UTF_8 = 0
 internal const val STATE_REJECT = 1

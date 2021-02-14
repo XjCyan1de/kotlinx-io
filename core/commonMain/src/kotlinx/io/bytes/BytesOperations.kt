@@ -1,8 +1,10 @@
 package kotlinx.io.bytes
 
-import kotlinx.io.*
-import kotlinx.io.buffer.*
-import kotlin.contracts.*
+import kotlinx.io.Input
+import kotlinx.io.buffer.DEFAULT_BUFFER_SIZE
+import kotlinx.io.copyTo
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Create [BytesInput] with content from [block] using specified [bufferSize].
@@ -20,6 +22,6 @@ fun buildInput(bufferSize: Int = DEFAULT_BUFFER_SIZE, block: BytesOutput.() -> U
 /**
  * Read [BytesInput] of fixed [size].
  */
-public fun Input.readBytesInput(size: Int): BytesInput = buildInput {
+fun Input.readBytesInput(size: Int): BytesInput = buildInput {
     copyTo(this, size)
 }

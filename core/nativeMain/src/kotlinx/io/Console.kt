@@ -7,16 +7,16 @@ import platform.posix.*
 @SharedImmutable
 private val MAX_POSIX_READ = SSIZE_MAX.coerceAtMost(Int.MAX_VALUE.convert()).toInt()
 
-public actual object Console {
-    public actual val input: Input = SystemIn
-    public actual val output: Output = SystemOut
-    public actual val error: Output = SystemErr
+actual object Console {
+    actual val input: Input = SystemIn
+    actual val output: Output = SystemOut
+    actual val error: Output = SystemErr
 }
 
 // TODO these two objects will be rewritten on top of FileDescriptor[Input|Output] with proper exception handling etc.
 // Now it's just a stub that works in the most basic use-cases
 @ThreadLocal // TODO decide something on thread locality
-public object SystemIn : Input() {
+object SystemIn : Input() {
 
     override fun fill(buffer: Buffer, startIndex: Int, endIndex: Int): Int {
         // Read no more than Int.MAX_VALUE and SSIZE_MAX
@@ -36,7 +36,7 @@ public object SystemIn : Input() {
 }
 
 @ThreadLocal
-public object SystemOut : Output() {
+object SystemOut : Output() {
     override fun flush(source: Buffer, startIndex: Int, endIndex: Int) {
         val error = source.usePointer {
             val size = endIndex - startIndex
@@ -53,7 +53,7 @@ public object SystemOut : Output() {
 }
 
 @ThreadLocal
-public object SystemErr : Output() {
+object SystemErr : Output() {
 
     override fun flush(source: Buffer, startIndex: Int, endIndex: Int) {
         val error = source.usePointer {

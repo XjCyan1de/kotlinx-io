@@ -6,4 +6,4 @@ package kotlinx.io
 @Retention(AnnotationRetention.BINARY)
 @RequiresOptIn
 @MustBeDocumented
-public annotation class ExperimentalIoApi
+annotation class ExperimentalIoApi

@@ -2,12 +2,12 @@
 
 package kotlinx.io
 
-public actual enum class ByteOrder {
+actual enum class ByteOrder {
     BIG_ENDIAN,
     LITTLE_ENDIAN;
 
-    public actual companion object {
-        public actual val native: ByteOrder = orderOf(java.nio.ByteOrder.nativeOrder())
+    actual companion object {
+        actual val native: ByteOrder = orderOf(java.nio.ByteOrder.nativeOrder())
     }
 }
 

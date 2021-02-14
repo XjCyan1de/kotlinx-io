@@ -1,12 +1,12 @@
 package kotlinx.io
 
-import kotlinx.io.internal.*
+import kotlinx.io.internal.LimitingInput
 
 /**
  * Creates an input from the given byte array, starting from inclusively [startIndex] and until [endIndex] exclusively.
  * The array is not copied, and calling [Input.close] on the resulting input has no effect.
  */
-public fun ByteArrayInput(source: ByteArray, startIndex: Int = 0, endIndex: Int = source.size): Input {
+fun ByteArrayInput(source: ByteArray, startIndex: Int = 0, endIndex: Int = source.size): Input {
     require(startIndex in 0..endIndex && endIndex <= source.size) {
         "Invalid range of indices ($startIndex..$endIndex) for array of size ${source.size}"
     }
@@ -18,7 +18,7 @@ public fun ByteArrayInput(source: ByteArray, startIndex: Int = 0, endIndex: Int 
  * The resulting input will be closed as soon as either the original input is exhausted
  * or [limit] bytes is read.
  */
-public fun Input.limit(limit: Long): Input {
+fun Input.limit(limit: Long): Input {
     require(limit >= 0) { "Limit must not be negative, have $limit" }
     return LimitingInput(this, limit)
 }
@@ -28,4 +28,4 @@ public fun Input.limit(limit: Long): Input {
  * The resulting input will be closed as soon as either the original input is exhausted
  * or [limit] bytes is read.
  */
-public fun Input.limit(limit: Int): Input = limit(limit.toLong())
+fun Input.limit(limit: Int): Input = limit(limit.toLong())

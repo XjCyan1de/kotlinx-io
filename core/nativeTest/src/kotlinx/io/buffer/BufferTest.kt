@@ -1,7 +1,10 @@
 package kotlinx.io.buffer
 
-import kotlinx.cinterop.*
-import kotlin.test.*
+import kotlinx.cinterop.addressOf
+import kotlinx.cinterop.usePinned
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class BufferTest {
 

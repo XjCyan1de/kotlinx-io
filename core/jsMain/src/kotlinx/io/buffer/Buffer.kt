@@ -6,20 +6,20 @@ import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.DataView
 import org.khronos.webgl.Int8Array
 
-public actual class Buffer(public val view: DataView) {
+actual class Buffer(val view: DataView) {
 
-    public actual inline val size: Int get() = view.byteLength
+    actual inline val size: Int get() = view.byteLength
 
-    public actual fun loadByteAt(index: Int): Byte = checked(index) {
+    actual fun loadByteAt(index: Int): Byte = checked(index) {
         return view.getInt8(index)
     }
 
-    public actual fun storeByteAt(index: Int, value: Byte) = checked(index) {
+    actual fun storeByteAt(index: Int, value: Byte) = checked(index) {
         view.setInt8(index, value)
     }
 
-    public actual companion object {
-        public actual val EMPTY: Buffer = Buffer(DataView(ArrayBuffer(0)))
+    actual companion object {
+        actual val EMPTY: Buffer = Buffer(DataView(ArrayBuffer(0)))
     }
 }
 

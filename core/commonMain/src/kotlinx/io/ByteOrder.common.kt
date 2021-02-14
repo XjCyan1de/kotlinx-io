@@ -4,7 +4,7 @@ package kotlinx.io
  * ByteOrder is the enumeration that represents an endianness of the arbitrary binary data.
  * Endianness refers to the order of bytes within a binary representation.
  */
-public expect enum class ByteOrder {
+expect enum class ByteOrder {
     /**
      * Big-endian: the most significant byte is at the lowest address.
      */
@@ -15,11 +15,11 @@ public expect enum class ByteOrder {
      */
     LITTLE_ENDIAN;
 
-    public companion object {
+    companion object {
         /**
          * The byte order of the underlying platform.
          */
-        public val native: ByteOrder
+        val native: ByteOrder
     }
 }
 

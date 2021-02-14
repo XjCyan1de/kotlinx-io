@@ -1,7 +1,9 @@
 package kotlinx.io.internal
 
-import kotlinx.io.*
-import kotlinx.io.buffer.*
+import kotlinx.io.Input
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.buffer.UnmanagedBufferPool
+import kotlinx.io.buffer.storeByteArray
 
 internal class ByteArrayInput(
     private val source: ByteArray,

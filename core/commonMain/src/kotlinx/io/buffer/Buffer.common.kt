@@ -1,6 +1,5 @@
 package kotlinx.io.buffer
 
-import kotlin.IndexOutOfBoundsException
 import kotlinx.io.*
 
 /**
@@ -34,29 +33,29 @@ import kotlinx.io.*
  * [Buffer] itself does not have any built-in endianness, and its content interpretation is defined
  * by the owner/user of the buffer. By default, all stores and loads are performed in network byte order (big-endian).
  */
-public expect class Buffer {
+expect class Buffer {
     /**
      * Size of buffer range in bytes.
      */
-    public val size: Int
+    val size: Int
 
     /**
      * Returns byte at [index] position.
      * May throw [IndexOutOfBoundsException] if index is negative or greater than buffer size.
      */
-    public fun loadByteAt(index: Int): Byte
+    fun loadByteAt(index: Int): Byte
 
     /**
      * Writes byte [value] at the specified [index].
      * May throw [IndexOutOfBoundsException] if index is negative or greater than buffer size.
      */
-    public fun storeByteAt(index: Int, value: Byte)
+    fun storeByteAt(index: Int, value: Byte)
 
-    public companion object {
+    companion object {
         /**
          * Represents an empty buffer.
          */
-        public val EMPTY: Buffer
+        val EMPTY: Buffer
     }
 }
 

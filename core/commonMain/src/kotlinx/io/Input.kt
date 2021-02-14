@@ -1,9 +1,10 @@
 package kotlinx.io
 
 import kotlinx.io.buffer.*
-import kotlinx.io.bytes.*
-import kotlinx.io.pool.*
-import kotlin.math.*
+import kotlinx.io.bytes.Bytes
+import kotlinx.io.bytes.pointed
+import kotlinx.io.pool.ObjectPool
+import kotlin.math.min
 
 /**
  * [Input] is an abstract base class for synchronous byte readers.
@@ -43,7 +44,7 @@ import kotlin.math.*
  *
  * TODO: document [prefetch] and (abstract, protected) API.
  */
-public abstract class Input : Closeable {
+abstract class Input : Closeable {
     /**
      * Buffer pool used by this [Input] for copy and cache operations.
      */
@@ -122,7 +123,7 @@ public abstract class Input : Closeable {
      * If [Input] and [Output] have different buffer pools, available bytes are copied and
      * no direct transfer is performed
      */
-    public fun readAvailableTo(destination: Output): Int {
+    fun readAvailableTo(destination: Output): Int {
         if (!previewDiscard) {
             return copyAvailableTo(destination)
         }
@@ -155,7 +156,7 @@ public abstract class Input : Closeable {
      *
      * @return number of bytes written to the [destination].
      */
-    public fun readAvailableTo(
+    fun readAvailableTo(
         destination: Buffer,
         startIndex: Int = 0,
         endIndex: Int = destination.size
@@ -179,7 +180,7 @@ public abstract class Input : Closeable {
      *
      * Preview operations can be nested.
      */
-    public fun <R> preview(reader: Input.() -> R): R {
+    fun <R> preview(reader: Input.() -> R): R {
         if (position == limit && fetchCachedOrFill() == 0) {
             throw EOFException("End of file while reading buffer")
         }
@@ -215,14 +216,14 @@ public abstract class Input : Closeable {
      * performance-critical code.
      */
     @Suppress("NOTHING_TO_INLINE")
-    public inline fun exhausted(): Boolean = !prefetch(1)
+    inline fun exhausted(): Boolean = !prefetch(1)
 
     /**
      * Checks that [size] bytes are fetched in [Input].
      *
      * @return true if this [Input] contains at least [size] bytes.
      */
-    public fun prefetch(size: Int): Boolean {
+    fun prefetch(size: Int): Boolean {
         checkSize(size)
 
         if (position == limit && fetchCachedOrFill() == 0) {
@@ -242,7 +243,7 @@ public abstract class Input : Closeable {
      *
      * @return skipped bytes count. It could be less than [count] if no more bytes available.
      */
-    public fun discard(count: Int): Int {
+    fun discard(count: Int): Int {
         checkCount(count)
 
         var remaining = count
@@ -264,7 +265,7 @@ public abstract class Input : Closeable {
     /**
      * Closes input including the underlying source. All pending bytes will be discarded.
      */
-    public final override fun close() {
+    final override fun close() {
         closeSource()
 
         limit = position

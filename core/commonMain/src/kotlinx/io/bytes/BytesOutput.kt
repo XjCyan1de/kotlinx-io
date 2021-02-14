@@ -1,14 +1,16 @@
 package kotlinx.io.bytes
 
-import kotlinx.io.*
-import kotlinx.io.buffer.*
+import kotlinx.io.Output
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.buffer.DEFAULT_BUFFER_SIZE
+import kotlinx.io.buffer.compact
 
 /**
  * Create unlimited [Output] stored in memory.
  * In advance to [Output] you can check [size] and create [BytesInput] with [createInput].
  * [BytesOutput] isn't using any pools and shouldn't be closed.
  */
-public class BytesOutput(
+class BytesOutput(
     private val bufferSize: Int = DEFAULT_BUFFER_SIZE
 ) : Output(unmanagedPoolOfBuffers(bufferSize)) {
     private val bytes = Bytes()
@@ -16,7 +18,7 @@ public class BytesOutput(
     /**
      * Size of content.
      */
-    public val size: Int get() = bytes.size() + size()
+    val size: Int get() = bytes.size() + size()
 
     /**
      * Create [BytesInput] from this [Output].
@@ -25,7 +27,7 @@ public class BytesOutput(
      *
      * [BytesOutput] is safe to append content after [createInput]. It won't change any already created [BytesInput].
      */
-    public fun createInput(): BytesInput {
+    fun createInput(): BytesInput {
         if (size() > 0) {
             flush()
         }

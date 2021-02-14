@@ -13,7 +13,7 @@ import kotlin.contracts.contract
  * to the [destination] at [destinationOffset].
  * Copying bytes from a buffer to itself is allowed.
  */
-public actual fun Buffer.copyTo(destination: Buffer, offset: Int, length: Int, destinationOffset: Int) {
+actual fun Buffer.copyTo(destination: Buffer, offset: Int, length: Int, destinationOffset: Int) {
     if (buffer.hasArray() && destination.buffer.hasArray() &&
         !buffer.isReadOnly && !destination.buffer.isReadOnly
     // TODO: why this check? buffer.isReadOnly
@@ -46,7 +46,7 @@ public actual fun Buffer.copyTo(destination: Buffer, offset: Int, length: Int, d
  * Copies bytes from this buffer range from the specified [offset] and [length]
  * to the [destination] at [destinationOffset].
  */
-public actual fun Buffer.copyTo(
+actual fun Buffer.copyTo(
     destination: ByteArray,
     offset: Int,
     length: Int,
@@ -70,7 +70,7 @@ public actual fun Buffer.copyTo(
  * Copies bytes from this buffer range from the specified [offset]
  * to the [destination] buffer.
  */
-public fun Buffer.copyTo(
+fun Buffer.copyTo(
     destination: ByteBuffer,
     offset: Int
 ) {
@@ -102,14 +102,14 @@ public fun Buffer.copyTo(
  * Copies bytes from this buffer range from the specified [offset]
  * to the [destination] buffer.
  */
-public fun Buffer.copyTo(destination: ByteBuffer, offset: Long) {
+fun Buffer.copyTo(destination: ByteBuffer, offset: Long) {
     copyTo(destination, offset.toIntOrFail { "offset" })
 }
 
 /**
  * Copies byte from this buffer moving it's position to the [destination] at [offset].
  */
-public fun ByteBuffer.copyTo(destination: Buffer, offset: Int) {
+fun ByteBuffer.copyTo(destination: Buffer, offset: Int) {
     if (hasArray() && !isReadOnly) {
         destination.storeByteArray(offset, array(), arrayOffset() + position(), remaining())
         position(limit())
@@ -138,7 +138,7 @@ internal fun ByteBuffer.sliceSafe(offset: Int, length: Int): ByteBuffer {
 /**
  * Fills the buffer range starting at the specified [offset] with [value] repeated [count] times.
  */
-public actual fun Buffer.fill(offset: Int, count: Int, value: Byte) {
+actual fun Buffer.fill(offset: Int, count: Int, value: Byte) {
     for (index in offset until offset + count) {
         buffer.put(index, value)
     }
@@ -150,7 +150,7 @@ public actual fun Buffer.fill(offset: Int, count: Int, value: Byte) {
  * By default, if neither [offset] nor [length] specified, the whole array is used.
  * An instance of [Buffer] provided into the [block] should be never captured and used outside of lambda.
  */
-public actual inline fun <R> ByteArray.useBuffer(offset: Int, length: Int, block: (Buffer) -> R): R {
+actual inline fun <R> ByteArray.useBuffer(offset: Int, length: Int, block: (Buffer) -> R): R {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }

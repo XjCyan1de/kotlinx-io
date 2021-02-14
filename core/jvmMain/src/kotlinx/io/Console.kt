@@ -4,11 +4,11 @@ import kotlinx.io.buffer.Buffer
 import kotlinx.io.buffer.get
 import kotlinx.io.buffer.set
 
-public actual object Console {
+actual object Console {
 
-    public actual val input: Input = SystemIn
-    public actual val output: Output = SystemOut
-    public actual val error: Output = SystemErr
+    actual val input: Input = SystemIn
+    actual val output: Output = SystemOut
+    actual val error: Output = SystemErr
 }
 
 private object SystemIn : Input() {

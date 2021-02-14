@@ -7,14 +7,14 @@ private val isNodeJs = js(
     "typeof process !== 'undefined' && process.versions != null && process.versions.node != null"
 ) as Boolean
 
-public actual object Console {
-    public actual val input: Input
+actual object Console {
+    actual val input: Input
         get() {
             throw NotImplementedError("Standard input is not implemented in JS")
         }
 
-    public actual val output: Output = ConsoleOut
-    public actual val error: Output = ConsoleErr
+    actual val output: Output = ConsoleOut
+    actual val error: Output = ConsoleErr
 }
 
 private object ConsoleOut : ConsolePrinter({ console.log(it) }, "output")

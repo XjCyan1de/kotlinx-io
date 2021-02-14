@@ -1,6 +1,6 @@
 package kotlinx.io.buffer
 
-import kotlinx.io.pool.*
+import kotlinx.io.pool.DirectAllocationPool
 
 internal class DirectAllocationBufferPool(
     private val bufferSize: Int = DEFAULT_BUFFER_SIZE,

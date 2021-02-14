@@ -6,7 +6,7 @@ package kotlinx.io.buffer
  * Copies bytes from this buffer range from the specified [offset] and [count]
  * to the [destination] at [destinationOffset].
  */
-public inline fun Buffer.loadByteArray(
+inline fun Buffer.loadByteArray(
     offset: Int,
     destination: ByteArray,
     destinationOffset: Int = 0,
@@ -19,7 +19,7 @@ public inline fun Buffer.loadByteArray(
  * Copies unsigned shorts integers from the [source] array at [sourceOffset] to this buffer at the specified [offset].
  * @param sourceOffset items
  */
-public inline fun Buffer.storeByteArray(
+inline fun Buffer.storeByteArray(
     offset: Int,
     source: ByteArray,
     sourceOffset: Int = 0,

@@ -1,7 +1,8 @@
 package kotlinx.io.bytes
 
-import kotlinx.io.buffer.*
-import kotlin.contracts.*
+import kotlinx.io.buffer.Buffer
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Byte sequence on top of Array of [Buffer].

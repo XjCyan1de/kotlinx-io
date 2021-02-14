@@ -1,6 +1,8 @@
 package kotlinx.io
 
-import kotlinx.io.buffer.*
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.buffer.UnmanagedBufferPool
+import kotlinx.io.buffer.get
 
 /**
  * Output which uses a byte array as its data storage.
@@ -10,7 +12,7 @@ import kotlinx.io.buffer.*
  *
  * Calling [close][Output.close] on this class has no effect.
  */
-public class ByteArrayOutput(initialCapacity: Int = 16) : Output(UnmanagedBufferPool.Instance) {
+class ByteArrayOutput(initialCapacity: Int = 16) : Output(UnmanagedBufferPool.Instance) {
     init {
         require(initialCapacity > 0) { "Initial capacity should be greater than 0, but has $initialCapacity" }
     }
@@ -21,7 +23,7 @@ public class ByteArrayOutput(initialCapacity: Int = 16) : Output(UnmanagedBuffer
     /**
      * Returns a copy of all bytes that were written to the current output.
      */
-    public fun toByteArray(): ByteArray {
+    fun toByteArray(): ByteArray {
         flush()
         return array.copyOf(size)
     }
@@ -48,5 +50,6 @@ public class ByteArrayOutput(initialCapacity: Int = 16) : Output(UnmanagedBuffer
         }
     }
 
-    private fun powOf2(minCapacity: Int) = if (minCapacity >= 1 shl 30) minCapacity else (1 shl (32 - (minCapacity - 1).countLeadingZeroBits()))
+    private fun powOf2(minCapacity: Int) =
+        if (minCapacity >= 1 shl 30) minCapacity else (1 shl (32 - (minCapacity - 1).countLeadingZeroBits()))
 }

@@ -1,12 +1,12 @@
 package kotlinx.io.text
 
-public expect abstract class Charset {
-    public abstract fun newEncoder(): CharsetEncoder
-    public abstract fun newDecoder(): CharsetDecoder
+expect abstract class Charset {
+    abstract fun newEncoder(): CharsetEncoder
+    abstract fun newDecoder(): CharsetDecoder
 
-    public companion object {
-        public fun forName(name: String): Charset
+    companion object {
+        fun forName(name: String): Charset
     }
 }
 
-public expect val Charset.name: String
+expect val Charset.name: String

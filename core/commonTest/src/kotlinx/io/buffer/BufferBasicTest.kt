@@ -1,6 +1,9 @@
 package kotlinx.io.buffer
 
-import kotlin.test.*
+import kotlin.test.Ignore
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class BufferBasicTest {
     @Test

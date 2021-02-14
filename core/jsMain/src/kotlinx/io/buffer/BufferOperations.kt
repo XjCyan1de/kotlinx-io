@@ -13,7 +13,7 @@ import kotlin.contracts.contract
  * to the [destination] at [destinationOffset].
  * Copying bytes from a memory to itself is allowed.
  */
-public actual fun Buffer.copyTo(
+actual fun Buffer.copyTo(
     destination: Buffer,
     offset: Int,
     length: Int,
@@ -29,7 +29,7 @@ public actual fun Buffer.copyTo(
  * Copies bytes from this memory range from the specified [offset] and [length]
  * to the [destination] at [destinationOffset].
  */
-public actual fun Buffer.copyTo(
+actual fun Buffer.copyTo(
     destination: ByteArray,
     offset: Int,
     length: Int,
@@ -46,7 +46,7 @@ public actual fun Buffer.copyTo(
 /**
  * Fills memory range starting at the specified [offset] with [value] repeated [count] times.
  */
-public actual fun Buffer.fill(offset: Int, count: Int, value: Byte) {
+actual fun Buffer.fill(offset: Int, count: Int, value: Byte) {
     for (index in offset until offset + count) {
         this[index] = value
     }
@@ -56,7 +56,7 @@ public actual fun Buffer.fill(offset: Int, count: Int, value: Byte) {
  * Copies bytes from this memory range from the specified [offset] and [length]
  * to the [destination] at [destinationOffset].
  */
-public fun Buffer.copyTo(destination: ArrayBuffer, offset: Int, length: Int, destinationOffset: Int) {
+fun Buffer.copyTo(destination: ArrayBuffer, offset: Int, length: Int, destinationOffset: Int) {
     @Suppress("UnsafeCastFromDynamic")
     val to = Int8Array(destination, destinationOffset, length)
     val from = Int8Array(view.buffer, view.byteOffset + offset, length)
@@ -68,7 +68,7 @@ public fun Buffer.copyTo(destination: ArrayBuffer, offset: Int, length: Int, des
  * Copies bytes from this memory range from the specified [offset] and [length]
  * to the [destination] at [destinationOffset].
  */
-public fun Buffer.copyTo(destination: ArrayBufferView, offset: Int, length: Int, destinationOffset: Int) {
+fun Buffer.copyTo(destination: ArrayBufferView, offset: Int, length: Int, destinationOffset: Int) {
     @Suppress("UnsafeCastFromDynamic")
     val to = Int8Array(destination.buffer, destinationOffset + destination.byteOffset, length)
     val from = Int8Array(view.buffer, view.byteOffset + offset, length)
@@ -80,7 +80,7 @@ public fun Buffer.copyTo(destination: ArrayBufferView, offset: Int, length: Int,
  * Copies bytes from this memory range from the specified [offset] and [length]
  * to the [destination] at [destinationOffset].
  */
-public fun ArrayBuffer.copyTo(destination: Buffer, offset: Int, length: Int, destinationOffset: Int) {
+fun ArrayBuffer.copyTo(destination: Buffer, offset: Int, length: Int, destinationOffset: Int) {
     val from = Int8Array(this, offset, length)
     val to = Int8Array(destination.view.buffer, destination.view.byteOffset + destinationOffset, length)
 
@@ -91,7 +91,7 @@ public fun ArrayBuffer.copyTo(destination: Buffer, offset: Int, length: Int, des
  * Copies bytes from this memory range from the specified [offset] and [length]
  * to the [destination] at [destinationOffset].
  */
-public fun ArrayBufferView.copyTo(destination: Buffer, offset: Int, length: Int, destinationOffset: Int) {
+fun ArrayBufferView.copyTo(destination: Buffer, offset: Int, length: Int, destinationOffset: Int) {
     buffer.copyTo(destination, offset + byteOffset, length, destinationOffset)
 }
 
@@ -104,7 +104,7 @@ internal val Buffer.Int8ArrayView: Int8Array
  * By default, if neither [offset] nor [length] specified, the whole array is used.
  * An instance of [Buffer] provided into the [block] should be never captured and used outside of lambda.
  */
-public actual inline fun <R> ByteArray.useBuffer(offset: Int, length: Int, block: (Buffer) -> R): R {
+actual inline fun <R> ByteArray.useBuffer(offset: Int, length: Int, block: (Buffer) -> R): R {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -115,18 +115,18 @@ public actual inline fun <R> ByteArray.useBuffer(offset: Int, length: Int, block
 /**
  * Creates the [Buffer] view for the specified [view].
  */
-public fun Buffer.Companion.of(view: DataView): Buffer = Buffer(view)
+fun Buffer.Companion.of(view: DataView): Buffer = Buffer(view)
 
 /**
  * Creates the [Buffer] view for the specified [buffer] range starting at [offset] and the specified bytes [length].
  */
-public fun Buffer.Companion.of(buffer: ArrayBuffer, offset: Int = 0, length: Int = buffer.byteLength - offset): Buffer =
+fun Buffer.Companion.of(buffer: ArrayBuffer, offset: Int = 0, length: Int = buffer.byteLength - offset): Buffer =
     Buffer.of(DataView(buffer, offset, length))
 
 /**
  * Creates the [Buffer] view for the specified [array] range starting at [offset] and the specified bytes [length].
  */
-public fun Buffer.Companion.of(array: ByteArray, offset: Int = 0, length: Int = array.size - offset): Buffer {
+fun Buffer.Companion.of(array: ByteArray, offset: Int = 0, length: Int = array.size - offset): Buffer {
     @Suppress("UnsafeCastFromDynamic")
     val typedArray: Int8Array = array.asDynamic()
     return Buffer.of(typedArray, offset, length)
@@ -135,7 +135,7 @@ public fun Buffer.Companion.of(array: ByteArray, offset: Int = 0, length: Int = 
 /**
  * Creates the [Buffer] view for the specified [view] range starting at [offset] and the specified bytes [length].
  */
-public fun Buffer.Companion.of(view: ArrayBufferView, offset: Int = 0, length: Int = view.byteLength): Buffer {
+fun Buffer.Companion.of(view: ArrayBufferView, offset: Int = 0, length: Int = view.byteLength): Buffer {
     return Buffer.of(view.buffer, view.byteOffset + offset, length)
 }
 

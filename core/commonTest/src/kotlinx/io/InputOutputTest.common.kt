@@ -1,8 +1,8 @@
 package kotlinx.io
 
 import kotlinx.io.buffer.*
-import kotlinx.io.bytes.*
-import kotlinx.io.pool.*
+import kotlinx.io.bytes.buildInput
+import kotlinx.io.pool.DefaultPool
 import kotlin.test.*
 
 class InputOutputTest : LeakDetector() {

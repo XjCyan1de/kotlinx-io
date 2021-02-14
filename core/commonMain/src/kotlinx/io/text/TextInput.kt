@@ -9,7 +9,7 @@ import kotlinx.io.use
  * A line break is either `"\n"` or `"\r\n"` and is not included in the result.
  * @throws EOFException if the input is already exhausted
  */
-public fun Input.readUtf8Line(): String {
+fun Input.readUtf8Line(): String {
     checkExhausted()
 
     return buildString {
@@ -24,7 +24,7 @@ public fun Input.readUtf8Line(): String {
  *
  * @throws EOFException if the input is already exhausted
  */
-public fun Input.readUtf8Lines(): List<String> {
+fun Input.readUtf8Lines(): List<String> {
     checkExhausted()
     val list = ArrayList<String>()
 
@@ -42,7 +42,7 @@ public fun Input.readUtf8Lines(): List<String> {
  *
  * @throws EOFException if the input is already exhausted
  */
-public inline fun Input.forEachUtf8Line(action: (String) -> Unit) {
+inline fun Input.forEachUtf8Line(action: (String) -> Unit) {
     use {
         while (!exhausted())
             action(readUtf8Line())

@@ -1,4 +1,5 @@
- # TODO
+# TODO
+
 - Design
     - Input: bypass source exceptions in `Input.fill`
     - Output: Appendable
@@ -17,15 +18,15 @@
     - Output
     - Input operations
     - Interop
-       - InputStream, OutputStream
-       - okio: Source, Sink
+        - InputStream, OutputStream
+        - okio: Source, Sink
     - Text input
     - Text output
 - Benchmarks
-    -  Input: read byte array
+    - Input: read byte array
     - Output: all benchmarks
 - Samples
-    - Input and Output over 
+    - Input and Output over
         - File
         - Socket
         - RSocket

@@ -1,7 +1,10 @@
 package kotlinx.io
 
-import kotlinx.io.buffer.*
-import kotlin.test.*
+import kotlinx.io.buffer.DEFAULT_BUFFER_SIZE
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 class ByteArrayInputTest {
 

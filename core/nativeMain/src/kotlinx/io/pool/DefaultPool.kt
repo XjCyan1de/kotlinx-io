@@ -1,8 +1,9 @@
 package kotlinx.io.pool
 
-import kotlin.native.concurrent.*
+import kotlin.native.concurrent.ensureNeverFrozen
 
-public actual abstract class DefaultPool<T : Any> actual constructor(actual final override val capacity: Int) : ObjectPool<T> {
+actual abstract class DefaultPool<T : Any> actual constructor(actual final override val capacity: Int) :
+    ObjectPool<T> {
     private val instances = arrayOfNulls<Any?>(capacity)
     private var size = 0
 

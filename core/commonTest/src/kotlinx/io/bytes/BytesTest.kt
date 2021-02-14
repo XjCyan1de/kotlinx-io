@@ -1,7 +1,9 @@
 package kotlinx.io.bytes
 
 import kotlinx.io.*
-import kotlinx.io.text.*
+import kotlinx.io.text.readUtf8Line
+import kotlinx.io.text.readUtf8String
+import kotlinx.io.text.writeUtf8String
 import kotlin.test.*
 
 class BytesTest {

@@ -6,8 +6,8 @@ import kotlin.contracts.contract
 /**
  * Closeable resource.
  */
-public expect fun interface Closeable {
-    public fun close()
+expect fun interface Closeable {
+    fun close()
 }
 
 /**
@@ -17,7 +17,7 @@ public expect fun interface Closeable {
  * @param block a function to process this [Closeable] resource.
  * @return the result of [block] function invoked on this resource.
  */
-public inline fun <C : Closeable, R> C.use(block: (C) -> R): R {
+inline fun <C : Closeable, R> C.use(block: (C) -> R): R {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }

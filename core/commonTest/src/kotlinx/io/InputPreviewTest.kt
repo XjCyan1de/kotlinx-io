@@ -1,7 +1,8 @@
 package kotlinx.io
 
 import kotlinx.io.utils.LeakDetectingPool
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 class InputPreviewTest {
     private val bufferSizes = (1..64)

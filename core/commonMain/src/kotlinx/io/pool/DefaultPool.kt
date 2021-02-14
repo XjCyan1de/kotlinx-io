@@ -3,7 +3,7 @@ package kotlinx.io.pool
 /**
  * Default object pool implementation.
  */
-public expect abstract class DefaultPool<T : Any>(capacity: Int) : ObjectPool<T> {
+expect abstract class DefaultPool<T : Any>(capacity: Int) : ObjectPool<T> {
     /**
      * Pool capacity.
      */

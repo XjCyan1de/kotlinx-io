@@ -3,8 +3,8 @@ package kotlinx.io
 /**
  * Closeable resource.
  */
-public actual fun interface Closeable {
-    public actual fun close()
+actual fun interface Closeable {
+    actual fun close()
 }
 
 @PublishedApi

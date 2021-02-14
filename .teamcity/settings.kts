@@ -94,7 +94,8 @@ fun Project.build(platform: String) = platform(platform, "Build") {
             jvmArgs = "-Xmx1g"
             tasks = "clean check"
             // --continue is needed to run tests for all targets even if one target fails
-            gradleParams = "--info --stacktrace -P$versionSuffixParameter=SNAPSHOT -P$teamcitySuffixParameter=%build.counter% --continue"
+            gradleParams =
+                "--info --stacktrace -P$versionSuffixParameter=SNAPSHOT -P$teamcitySuffixParameter=%build.counter% --continue"
             buildFile = ""
             gradleWrapperPath = ""
         }
@@ -144,7 +145,8 @@ fun Project.deployConfigure() = BuildType {
             param("env.LIBCLANG_DISABLE_CRASH_RECOVERY", "1")
             name = "Verify Gradle Configuration"
             tasks = "clean publishBintrayCreateVersion"
-            gradleParams = "--info --stacktrace -P$versionSuffixParameter=%$versionSuffixParameter% -P$releaseVersionParameter=%$releaseVersionParameter% -PbintrayApiKey=%bintray-key% -PbintrayUser=%bintray-user%"
+            gradleParams =
+                "--info --stacktrace -P$versionSuffixParameter=%$versionSuffixParameter% -P$releaseVersionParameter=%$releaseVersionParameter% -PbintrayApiKey=%bintray-key% -PbintrayUser=%bintray-user%"
             buildFile = ""
             jdkHome = "%env.JDK_18%"
         }
@@ -185,7 +187,8 @@ fun Project.deploy(platform: String, configureBuild: BuildType) = platform(platf
             name = "Deploy $platform Binaries"
             jdkHome = "%env.JDK_18_x64%"
             jvmArgs = "-Xmx1g"
-            gradleParams = "--info --stacktrace -P$versionSuffixParameter=%$versionSuffixParameter% -P$releaseVersionParameter=%$releaseVersionParameter% -PbintrayApiKey=%bintray-key% -PbintrayUser=%bintray-user%"
+            gradleParams =
+                "--info --stacktrace -P$versionSuffixParameter=%$versionSuffixParameter% -P$releaseVersionParameter=%$releaseVersionParameter% -PbintrayApiKey=%bintray-key% -PbintrayUser=%bintray-user%"
             tasks = "clean build publish"
             buildFile = ""
             gradleWrapperPath = ""

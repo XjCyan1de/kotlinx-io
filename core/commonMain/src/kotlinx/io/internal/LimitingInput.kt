@@ -1,8 +1,8 @@
 package kotlinx.io.internal
 
-import kotlinx.io.*
-import kotlinx.io.buffer.*
-import kotlin.math.*
+import kotlinx.io.Input
+import kotlinx.io.buffer.Buffer
+import kotlin.math.min
 
 internal class LimitingInput(private val original: Input, private var bytesLeft: Long) : Input() {
 

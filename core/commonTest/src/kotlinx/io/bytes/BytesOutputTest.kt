@@ -1,7 +1,10 @@
 package kotlinx.io.bytes
 
 import kotlinx.io.*
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertTrue
 
 private val TEST_DATA = ByteArray(8 * 1024 + 1) { it.toByte() }
 

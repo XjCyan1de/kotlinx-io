@@ -1,8 +1,10 @@
 package kotlinx.io.text
 
-import kotlinx.io.*
-import kotlinx.io.bytes.*
-import kotlin.test.*
+import kotlinx.io.bytes.buildInput
+import kotlinx.io.readByteArray
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class OutputStringTest {
     private val bufferSizes = (1..64)

@@ -1,9 +1,9 @@
 package kotlinx.io
 
-import kotlinx.io.buffer.*
-import kotlinx.io.pool.*
-import kotlin.random.*
-import kotlin.test.*
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.pool.ObjectPool
+import kotlin.random.Random
+import kotlin.test.fail
 
 
 fun sequentialInfiniteInput(

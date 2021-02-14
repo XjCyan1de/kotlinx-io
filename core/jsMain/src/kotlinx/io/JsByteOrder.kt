@@ -4,12 +4,12 @@ package kotlinx.io
 
 import org.khronos.webgl.*
 
-public actual enum class ByteOrder {
+actual enum class ByteOrder {
     BIG_ENDIAN,
     LITTLE_ENDIAN;
 
-    public actual companion object {
-        public actual val native: ByteOrder = run {
+    actual companion object {
+        actual val native: ByteOrder = run {
             val buffer = ArrayBuffer(4)
             val arr = Int32Array(buffer)
             val view = DataView(buffer)

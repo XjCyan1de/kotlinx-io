@@ -4,11 +4,11 @@ package kotlinx.io
 
 import kotlinx.cinterop.*
 
-public actual enum class ByteOrder {
+actual enum class ByteOrder {
     BIG_ENDIAN, LITTLE_ENDIAN;
 
-    public actual companion object {
-        public actual val native: ByteOrder = memScoped {
+    actual companion object {
+        actual val native: ByteOrder = memScoped {
             val i = alloc<IntVar>()
             i.value = 1
             val bytes = i.reinterpret<ByteVar>()

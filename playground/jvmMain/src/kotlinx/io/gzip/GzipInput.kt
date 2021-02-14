@@ -1,9 +1,10 @@
 package kotlinx.io.gzip
 
-import kotlinx.io.*
+import kotlinx.io.Input
 import kotlinx.io.buffer.*
-import java.io.*
-import java.util.zip.*
+import kotlinx.io.readByte
+import java.io.InputStream
+import java.util.zip.InflaterInputStream
 
 class GzipInput(private val original: Input) : Input() {
     private val inputStream = object : InputStream() {

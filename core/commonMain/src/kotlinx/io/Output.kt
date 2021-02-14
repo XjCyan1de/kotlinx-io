@@ -16,7 +16,7 @@ import kotlin.contracts.contract
  *
  * To implement [Output] over a custom sink, you should override only [fill] method.
  */
-public abstract class Output(
+abstract class Output(
     protected val pool: ObjectPool<Buffer> = DefaultBufferPool.Instance
 ) : Closeable {
     /**
@@ -37,7 +37,7 @@ public abstract class Output(
     /**
      * Write byte to this [Input].
      */
-    public fun writeByte(value: Byte) {
+    fun writeByte(value: Byte) {
         val offset = position
         val size = buffer.size
         val targetLimit = offset + 1
@@ -66,7 +66,7 @@ public abstract class Output(
     /**
      * Write all buffered bytes to underlying sink.
      */
-    public fun flush() {
+    fun flush() {
         if (position == 0) {
             return
         }
@@ -77,7 +77,7 @@ public abstract class Output(
      * Closes the current output, flushing all buffered data to the underlying source
      * and [closing][closeSource] it.
      */
-    public final override fun close() {
+    final override fun close() {
         val flushException = runCatching { flush() }.exceptionOrNull()
         val closeException = runCatching { closeSource() }.exceptionOrNull()
         if (flushException !== null) {

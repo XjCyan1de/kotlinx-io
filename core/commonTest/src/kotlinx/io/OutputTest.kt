@@ -2,9 +2,12 @@
 
 package kotlinx.io
 
-import kotlinx.io.buffer.*
-import kotlinx.io.bytes.*
-import kotlin.test.*
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.buffer.bufferOf
+import kotlinx.io.bytes.buildInput
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class OutputTest : LeakDetector() {
     @Test

@@ -5,7 +5,7 @@ package kotlinx.io.buffer
 import kotlinx.cinterop.*
 import kotlin.native.concurrent.*
 
-public actual class Buffer constructor(
+actual class Buffer constructor(
     val array: ByteArray,
     inline val offset: Int = 0,
     actual inline val size: Int = array.size - offset
@@ -14,19 +14,19 @@ public actual class Buffer constructor(
         requirePositiveIndex(size, "size")
     }
 
-    public actual inline fun loadByteAt(index: Int): Byte = array[assertIndex(offset + index, 1)]
+    actual inline fun loadByteAt(index: Int): Byte = array[assertIndex(offset + index, 1)]
 
-    public actual inline fun storeByteAt(index: Int, value: Byte) {
+    actual inline fun storeByteAt(index: Int, value: Byte) {
         array[assertIndex(offset + index, 1)] = value
     }
 
-    public override fun toString(): String = usePointer {
+    override fun toString(): String = usePointer {
         "Buffer[$it:$size]"
     }
 
-    public actual companion object {
+    actual companion object {
         @SharedImmutable
-        public actual val EMPTY: Buffer = Buffer(ByteArray(0))
+        actual val EMPTY: Buffer = Buffer(ByteArray(0))
     }
 }
 
@@ -35,7 +35,7 @@ public actual class Buffer constructor(
  *
  * Consider using it only in interop calls.
  */
-public inline fun <R> Buffer.usePointer(block: (pointer: CPointer<ByteVar>) -> R): R = array.usePinned {
+inline fun <R> Buffer.usePointer(block: (pointer: CPointer<ByteVar>) -> R): R = array.usePinned {
     block((it.addressOf(0) + offset)!!)
 }
 

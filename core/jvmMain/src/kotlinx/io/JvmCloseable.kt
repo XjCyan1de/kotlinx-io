@@ -2,7 +2,7 @@ package kotlinx.io
 
 import java.lang.reflect.Method
 
-public actual typealias Closeable = java.io.Closeable
+actual typealias Closeable = java.io.Closeable
 
 @PublishedApi
 internal actual fun Throwable.addSuppressedInternal(other: Throwable) {

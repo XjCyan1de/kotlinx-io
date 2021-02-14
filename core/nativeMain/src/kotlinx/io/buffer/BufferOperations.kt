@@ -13,7 +13,7 @@ import kotlin.contracts.contract
  * to the [destination] at [destinationOffset].
  * Copying bytes from a memory to itself is allowed.
  */
-public actual fun Buffer.copyTo(destination: Buffer, offset: Int, length: Int, destinationOffset: Int) {
+actual fun Buffer.copyTo(destination: Buffer, offset: Int, length: Int, destinationOffset: Int) {
     require(offset >= 0) { "offset shouldn't be negative: $offset" }
     require(length >= 0) { "length shouldn't be negative: $length" }
     require(destinationOffset >= 0) { "destinationOffset shouldn't be negative: $destinationOffset" }
@@ -39,7 +39,7 @@ public actual fun Buffer.copyTo(destination: Buffer, offset: Int, length: Int, d
  * Copies bytes from this memory range from the specified [offset] and [length]
  * to the [destination] at [destinationOffset].
  */
-public actual fun Buffer.copyTo(
+actual fun Buffer.copyTo(
     destination: ByteArray,
     offset: Int,
     length: Int,
@@ -78,7 +78,7 @@ internal fun Long.toBigEndian(): Long = when (PLATFORM_BIG_ENDIAN) {
 /**
  * Fills the memory range starting at the specified [offset] with [value] repeated [count] times.
  */
-public actual fun Buffer.fill(offset: Int, count: Int, value: Byte) {
+actual fun Buffer.fill(offset: Int, count: Int, value: Byte) {
     requirePositiveIndex(offset, "offset")
     requirePositiveIndex(count, "count")
     requireRange(offset, count, size, "fill")
@@ -93,7 +93,7 @@ public actual fun Buffer.fill(offset: Int, count: Int, value: Byte) {
  * Copies the content bytes to the memory addressed by the [destination] pointer with
  * the specified [destinationOffset] in bytes.
  */
-public fun Buffer.copyTo(destination: CPointer<ByteVar>, offset: Int, length: Int, destinationOffset: Int) {
+fun Buffer.copyTo(destination: CPointer<ByteVar>, offset: Int, length: Int, destinationOffset: Int) {
     requirePositiveIndex(offset, "offset")
     requirePositiveIndex(length, "length")
     requirePositiveIndex(destinationOffset, "destinationOffset")
@@ -108,7 +108,7 @@ public fun Buffer.copyTo(destination: CPointer<ByteVar>, offset: Int, length: In
  * Copies the [length] bytes to the [destination] at the specified [destinationOffset]
  * from the memory addressed by this pointer with [offset] in bytes.
  */
-public fun CPointer<ByteVar>.copyTo(destination: Buffer, offset: Int, length: Int, destinationOffset: Int) {
+fun CPointer<ByteVar>.copyTo(destination: Buffer, offset: Int, length: Int, destinationOffset: Int) {
     requirePositiveIndex(offset, "offset")
     requirePositiveIndex(length, "length")
     requirePositiveIndex(destinationOffset, "destinationOffset")
@@ -125,7 +125,7 @@ public fun CPointer<ByteVar>.copyTo(destination: Buffer, offset: Int, length: In
  * By default, if neither [offset] nor [length] specified, the whole array is used.
  * An instance of [Buffer] provided into the [block] should be never captured and used outside of lambda.
  */
-public actual inline fun <R> ByteArray.useBuffer(offset: Int, length: Int, block: (Buffer) -> R): R {
+actual inline fun <R> ByteArray.useBuffer(offset: Int, length: Int, block: (Buffer) -> R): R {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }

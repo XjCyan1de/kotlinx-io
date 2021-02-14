@@ -1,7 +1,9 @@
 package kotlinx.io.text
 
-import kotlinx.io.*
+import kotlinx.io.Output
 import kotlinx.io.buffer.*
+import kotlinx.io.writeInt
+import kotlinx.io.writeShort
 
 private const val lastASCII = 0x7F.toChar()
 
@@ -10,7 +12,7 @@ private const val lastASCII = 0x7F.toChar()
  *
  * @throws MalformedInputException if encoding is invalid.
  */
-public fun Output.writeUtf8String(text: CharSequence, index: Int = 0, length: Int = text.length - index) {
+fun Output.writeUtf8String(text: CharSequence, index: Int = 0, length: Int = text.length - index) {
     var textIndex = index // index in text
     val textEndIndex = index + length // index of char after last
     var bytes = 0 // current left bytes to write (in inverted order)
@@ -100,7 +102,7 @@ public fun Output.writeUtf8String(text: CharSequence, index: Int = 0, length: In
  * @return count of written bytes
  * @throws MalformedInputException if [character] is splitted surrogate or invalid.
  */
-public fun Output.writeUtf8Char(character: Char): Int {
+fun Output.writeUtf8Char(character: Char): Int {
     // ASCII character
     if (character <= lastASCII) {
         writeByte(character.toByte())
