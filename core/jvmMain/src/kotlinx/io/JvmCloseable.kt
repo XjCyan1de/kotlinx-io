@@ -1,6 +1,6 @@
 package kotlinx.io
 
-import java.lang.reflect.*
+import java.lang.reflect.Method
 
 public actual typealias Closeable = java.io.Closeable
 

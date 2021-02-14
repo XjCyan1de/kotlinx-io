@@ -1,6 +1,7 @@
 package kotlinx.io
 
-public actual open class IOException actual constructor(message: String, cause: Throwable?) : Exception(message, cause) {
+public actual open class IOException actual constructor(message: String, cause: Throwable?) :
+    Exception(message, cause) {
     public actual constructor(message: String) : this(message, null)
 }
 

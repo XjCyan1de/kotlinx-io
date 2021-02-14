@@ -1,6 +1,8 @@
 package kotlinx.io
 
-import kotlinx.io.buffer.*
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.buffer.get
+import kotlinx.io.buffer.set
 
 public actual object Console {
 

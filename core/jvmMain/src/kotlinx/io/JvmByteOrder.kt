@@ -2,7 +2,7 @@
 
 package kotlinx.io
 
-public actual enum class ByteOrder  {
+public actual enum class ByteOrder {
     BIG_ENDIAN,
     LITTLE_ENDIAN;
 

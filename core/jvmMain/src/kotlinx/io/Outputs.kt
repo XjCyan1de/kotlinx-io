@@ -1,7 +1,8 @@
 package kotlinx.io
 
-import kotlinx.io.internal.*
-import java.io.*
+import kotlinx.io.internal.OutputFromOutputStream
+import kotlinx.io.internal.OutputStreamFromOutput
+import java.io.OutputStream
 
 /**
  * Returns an [OutputStream] that uses the current [Output] as the destination.

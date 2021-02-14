@@ -1,6 +1,7 @@
 package kotlinx.io.text
 
-import org.khronos.webgl.*
+import org.khronos.webgl.ArrayBuffer
+import org.khronos.webgl.ArrayBufferView
 
 internal external class TextDecoder(encoding: String, options: dynamic = definedExternally) {
     val encoding: String

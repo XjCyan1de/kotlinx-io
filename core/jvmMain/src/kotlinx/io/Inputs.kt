@@ -1,7 +1,8 @@
 package kotlinx.io
 
-import kotlinx.io.internal.*
-import java.io.*
+import kotlinx.io.internal.InputFromInputStream
+import kotlinx.io.internal.InputStreamFromInput
+import java.io.InputStream
 
 /**
  * Returns an [InputStream] that uses the current [Input] as an underlying source of data.

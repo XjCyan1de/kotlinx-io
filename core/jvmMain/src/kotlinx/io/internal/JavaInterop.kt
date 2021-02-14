@@ -1,8 +1,14 @@
 package kotlinx.io.internal
 
-import kotlinx.io.*
-import kotlinx.io.buffer.*
-import java.io.*
+import kotlinx.io.Input
+import kotlinx.io.Output
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.buffer.bufferOf
+import kotlinx.io.buffer.get
+import kotlinx.io.buffer.set
+import kotlinx.io.readByte
+import java.io.InputStream
+import java.io.OutputStream
 
 internal class InputStreamFromInput(private val input: Input) : InputStream() {
     override fun read(): Int {

@@ -1,7 +1,7 @@
 package kotlinx.io
 
-import kotlinx.io.buffer.*
-import kotlinx.io.text.*
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.text.TextDecoder
 
 private val isNodeJs = js(
     "typeof process !== 'undefined' && process.versions != null && process.versions.node != null"
