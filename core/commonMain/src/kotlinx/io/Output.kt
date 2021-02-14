@@ -1,7 +1,12 @@
 package kotlinx.io
 
-import kotlinx.io.buffer.*
-import kotlinx.io.pool.*
+import kotlinx.io.buffer.Buffer
+import kotlinx.io.buffer.DEFAULT_BUFFER_SIZE
+import kotlinx.io.buffer.DefaultBufferPool
+import kotlinx.io.buffer.fill
+import kotlinx.io.pool.ObjectPool
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * [Output] is an abstract base for writable streams of bytes over some sink.
@@ -104,15 +109,18 @@ public abstract class Output(
     }
 
     /**
-     * Calls [writer] block to perform write from [bufferStart] to [bufferEnd].
+     * Calls [writer] block to perform write from bufferStart to bufferEnd.
      * The [writer] expected to return a new [buffer] position.
      *
      * @return number of written bytes.
      */
     internal inline fun writeBuffer(writer: (buffer: Buffer, bufferStart: Int, bufferEnd: Int) -> Int): Int {
-        if (position == buffer.size) {
-            flushBuffer()
+        contract {
+            callsInPlace(writer, InvocationKind.EXACTLY_ONCE)
         }
+
+        if (position == buffer.size)
+            flushBuffer()
 
         val newPosition = writer(buffer, position, buffer.size)
         val result = newPosition - position

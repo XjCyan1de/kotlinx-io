@@ -1,9 +1,11 @@
 package kotlinx.io.buffer
 
-import kotlinx.io.pool.*
-import kotlin.native.concurrent.*
+import kotlinx.io.pool.DefaultPool
+import kotlin.native.concurrent.ThreadLocal
 
+@PublishedApi
 internal const val DEFAULT_BUFFER_SIZE: Int = 1024
+
 internal const val DEFAULT_POOL_CAPACITY: Int = 16
 
 internal class DefaultBufferPool(
@@ -25,7 +27,6 @@ internal class DefaultBufferPool(
 
     @ThreadLocal
     companion object {
-        @ThreadLocal
         val Instance = DefaultBufferPool()
     }
 }

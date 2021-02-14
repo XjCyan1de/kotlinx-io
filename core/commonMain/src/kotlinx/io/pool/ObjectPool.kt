@@ -1,29 +1,36 @@
 package kotlinx.io.pool
 
-import kotlinx.io.*
+import kotlinx.io.Closeable
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
-interface ObjectPool<T : Any> : Closeable {
+public interface ObjectPool<T : Any> : Closeable {
     /**
      * Pool capacity
      */
-    val capacity: Int
+    public val capacity: Int
 
     /**
      * borrow an instance. Pool can recycle an old instance or create a new one
      */
-    fun borrow(): T
+    public fun borrow(): T
 
     /**
      * Recycle an instance. Should be recycled what was borrowed before otherwise could fail
      */
-    fun recycle(instance: T)
+    public fun recycle(instance: T)
 }
 
 /**
  * Borrows and instance of [T] from the pool, invokes [block] with it and finally recycles it
  */
-inline fun <T : Any, R> ObjectPool<T>.useInstance(block: (T) -> R): R {
+public inline fun <T : Any, R> ObjectPool<T>.useInstance(block: (T) -> R): R {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+
     val instance = borrow()
+
     try {
         return block(instance)
     } finally {

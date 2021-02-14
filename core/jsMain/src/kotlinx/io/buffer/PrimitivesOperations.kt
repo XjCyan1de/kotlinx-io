@@ -1,7 +1,9 @@
 package kotlinx.io.buffer
 
-import kotlinx.io.internal.*
-import org.khronos.webgl.*
+import kotlinx.io.internal.toIntOrFail
+import org.khronos.webgl.DataView
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 public actual fun Buffer.loadByteAt(index: Long): Byte = loadByteAt(index.toIntOrFail("index"))
 
@@ -49,35 +51,35 @@ public actual fun Buffer.loadDoubleAt(offset: Long): Double = checked(offset) {
 /**
  * Write regular signed 32bit integer in the network byte order (Big Endian)
  */
-public actual fun Buffer.storeIntAt(offset: Int, value: Int) = checked(offset) {
+public actual fun Buffer.storeIntAt(offset: Int, value: Int): Unit = checked(offset) {
     view.setInt32(offset, value, littleEndian = false)
 }
 
 /**
  * Write regular signed 32bit integer in the network byte order (Big Endian)
  */
-public actual fun Buffer.storeIntAt(offset: Long, value: Int) = checked(offset) {
+public actual fun Buffer.storeIntAt(offset: Long, value: Int): Unit = checked(offset) {
     view.setInt32(it, value, littleEndian = false)
 }
 
 /**
  * Write short signed 16bit integer in the network byte order (Big Endian)
  */
-public actual fun Buffer.storeShortAt(offset: Int, value: Short) = checked(offset) {
+public actual fun Buffer.storeShortAt(offset: Int, value: Short): Unit = checked(offset) {
     view.setInt16(offset, value, littleEndian = false)
 }
 
 /**
  * Write short signed 16bit integer in the network byte order (Big Endian)
  */
-public actual fun Buffer.storeShortAt(offset: Long, value: Short) = checked(offset) {
+public actual fun Buffer.storeShortAt(offset: Long, value: Short): Unit = checked(offset) {
     view.setInt16(it, value, littleEndian = false)
 }
 
 /**
  * Write short signed 64bit integer in the network byte order (Big Endian)
  */
-public actual fun Buffer.storeLongAt(offset: Int, value: Long) = checked(offset) {
+public actual fun Buffer.storeLongAt(offset: Int, value: Long): Unit = checked(offset) {
     view.setInt32(offset, (value shr 32).toInt(), littleEndian = false)
     view.setInt32(offset + 4, (value and 0xffffffffL).toInt(), littleEndian = false)
 }
@@ -85,21 +87,21 @@ public actual fun Buffer.storeLongAt(offset: Int, value: Long) = checked(offset)
 /**
  * Write short signed 64bit integer in the network byte order (Big Endian)
  */
-public actual fun Buffer.storeLongAt(offset: Long, value: Long) = checked(offset) {
+public actual fun Buffer.storeLongAt(offset: Long, value: Long): Unit = checked(offset) {
     storeLongAt(it, value)
 }
 
 /**
  * Write short signed 32bit floating point number in the network byte order (Big Endian)
  */
-public actual fun Buffer.storeFloatAt(offset: Int, value: Float) = checked(offset) {
+public actual fun Buffer.storeFloatAt(offset: Int, value: Float): Unit = checked(offset) {
     view.setFloat32(offset, value, littleEndian = false)
 }
 
 /**
  * Write short signed 32bit floating point number in the network byte order (Big Endian)
  */
-public actual fun Buffer.storeFloatAt(offset: Long, value: Float) = checked(offset) {
+public actual fun Buffer.storeFloatAt(offset: Long, value: Float): Unit = checked(offset) {
     view.setFloat32(it, value, littleEndian = false)
 }
 
@@ -113,16 +115,20 @@ public actual fun Buffer.storeDoubleAt(offset: Int, value: Double): Unit = check
 /**
  * Write short signed 64bit floating point number in the network byte order (Big Endian)
  */
-public actual fun Buffer.storeDoubleAt(offset: Long, value: Double) = checked(offset) {
+public actual fun Buffer.storeDoubleAt(offset: Long, value: Double): Unit = checked(offset) {
     view.setFloat64(it, value, littleEndian = false)
 }
 
-public actual fun Buffer.storeByteAt(index: Long, value: Byte) = checked(index) {
+public actual fun Buffer.storeByteAt(index: Long, value: Byte): Unit = checked(index) {
     storeByteAt(it, value)
 }
 
 @PublishedApi
 internal inline fun <T> Buffer.checked(offset: Int, block: DataView.() -> T): T {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+
     try {
         return view.block()
     } catch (e: RangeError) {
@@ -132,6 +138,10 @@ internal inline fun <T> Buffer.checked(offset: Int, block: DataView.() -> T): T 
 
 @PublishedApi
 internal inline fun <T> Buffer.checked(offset: Long, block: DataView.(offset: Int) -> T): T {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+
     try {
         return view.block(offset.toIntOrFail("offset"))
     } catch (e: RangeError) {
